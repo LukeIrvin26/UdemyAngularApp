@@ -3,26 +3,29 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Permission } from '../../../interfaces/permission';
 import { PermissionService } from '../../../services/permission.service';
 import { RoleService } from '../../../services/role.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Role } from '../../../interfaces/role';
 
 @Component({
-  selector: 'app-role-create',
-  templateUrl: './role-create.component.html',
-  styleUrls: ['./role-create.component.css'],
+  selector: 'app-role-edit',
+  templateUrl: './role-edit.component.html',
+  styleUrls: ['./role-edit.component.css'],
 })
-export class RoleCreateComponent implements OnInit {
+export class RoleEditComponent implements OnInit {
   form: FormGroup = this.formBuilder.group({
     name: '',
     permissions: this.formBuilder.array([]),
   });
 
   permissions: Permission[] = [];
+  id: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
     private permissionService: PermissionService,
     private roleService: RoleService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   get permissionArray(): FormArray {
@@ -41,6 +44,20 @@ export class RoleCreateComponent implements OnInit {
         );
       });
     });
+
+    this.id = this.route.snapshot.params.id;
+    this.roleService.get(this.id).subscribe((role: Role) => {
+      const values = this.permissions.map((p) => {
+        return {
+          value: role.permissions?.some((r) => r.id === p.id),
+          id: p.id,
+        };
+      });
+      this.form.patchValue({
+        name: role.name,
+        permissions: values,
+      });
+    });
   }
 
   submit(): void {
@@ -53,7 +70,7 @@ export class RoleCreateComponent implements OnInit {
     };
 
     this.roleService
-      .create(data)
+      .update(this.id, data)
       .subscribe(() => this.router.navigate(['/roles']));
   }
 }

@@ -18,29 +18,11 @@ export class UsersComponent implements OnInit {
     this.load();
   }
 
-  load() {
-    this.userService.all(this.page).subscribe((res: any) => {
+  load(page = 1) {
+    this.userService.all(page).subscribe((res: any) => {
       this.users = res.data;
       this.lastPage = res.meta.last_page;
     });
-  }
-
-  next(): void {
-    if (this.page === this.lastPage) {
-      return;
-    }
-
-    this.page++;
-    this.load();
-  }
-
-  prev(): void {
-    if (this.page === 1) {
-      return;
-    }
-
-    this.page--;
-    this.load();
   }
 
   delete(id: number) {

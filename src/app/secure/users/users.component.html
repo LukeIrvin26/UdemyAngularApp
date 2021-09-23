@@ -29,13 +29,4 @@
     </tbody>
   </table>
 </div>
-<nav>
-  <ul class="pagination">
-    <li class="page-item">
-      <a (click)="prev()" class="page-link" href="javascript:void(0)">Previous</a>
-    </li>
-    <li class="page-item">
-      <a (click)="next()" class="page-link" href="javascript:void(0)">Next</a>
-    </li>
-  </ul>
-</nav>
+<app-paginator (pageChanged)="load($event)" [lastPage]="this.lastPage"></app-paginator>
