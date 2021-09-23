@@ -1,0 +1,41 @@
+<div class="pt-3 pb-2 mb-3 border-bottom">
+  <a class="btn btn-sm btn-outline-secondary" routerLink="/users/create">Add</a>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.id}}</td>
+      <td>{{user.first_name}} {{user.last_name}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.role.name}}</td>
+      <td>
+        <div class="btn-group mr-2">
+          <a [routerLink]="['/users', user.id, 'edit']" class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a (click)="delete(user.id)" class="btn btn-sm btn-outline-secondary" href="javascript:void(0)">Delete</a>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<nav>
+  <ul class="pagination">
+    <li class="page-item">
+      <a (click)="prev()" class="page-link" href="javascript:void(0)">Previous</a>
+    </li>
+    <li class="page-item">
+      <a (click)="next()" class="page-link" href="javascript:void(0)">Next</a>
+    </li>
+  </ul>
+</nav>
